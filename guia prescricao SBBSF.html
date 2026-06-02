@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia de Prescrição — BEACHMED SBBSF</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul: #0D2A5E; --azul2: #1A3F80; --amarelo: #F5C500;
+  --verde: #009933; --vermelho: #C0392B; --laranja: #E67E22;
+  --roxo: #7B2D8B; --marrom: #A0522D; --teal: #1A6B9A;
+  --cinza: #F4F6F9; --borda: #DDE3EE; --texto: #1A1A2E; --muted: #6B7A99;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #F7F9FD; color: var(--texto); }
+
+header {
+  background: var(--azul); padding: 0; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 4px 24px rgba(13,42,94,0.18);
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 18px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-badge {
+  background: var(--amarelo); color: var(--azul);
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 11px;
+  letter-spacing: 1.5px; padding: 4px 10px; border-radius: 4px;
+  text-transform: uppercase; margin-right: 14px;
+}
+.header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: #fff; }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; }
+.back-btn {
+  background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 8px 16px; font-family: 'DM Sans', sans-serif;
+  font-size: 13px; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px;
+}
+.back-btn:hover { background: rgba(255,255,255,0.2); }
+
+.tabs-wrapper { background: #fff; border-bottom: 1px solid var(--borda); position: sticky; top: 73px; z-index: 90; }
+.tabs-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; gap: 4px; overflow-x: auto; }
+.tab-btn {
+  border: none; background: none; font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-weight: 500; color: var(--muted); padding: 14px 18px; cursor: pointer;
+  border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.18s;
+}
+.tab-btn:hover { color: var(--azul); }
+.tab-btn.ativo { color: var(--azul); border-bottom-color: var(--azul); font-weight: 700; }
+
+main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+
+.painel { display: none; }
+.painel.ativo { display: block; }
+
+/* ── INTRO BOX ── */
+.intro-box {
+  background: linear-gradient(135deg, #0D2A5E, #1A3F80);
+  border-radius: 14px; padding: 24px 28px; margin-bottom: 28px;
+  border-left: 6px solid var(--amarelo);
+}
+.intro-box h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 8px; }
+.intro-box p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+.intro-badge {
+  display: inline-block; background: var(--amarelo); color: var(--azul);
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 10px;
+  letter-spacing: 1px; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px;
+}
+
+/* ── TABELA DE PRESCRIÇÃO ── */
+.presc-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+.presc-table th {
+  background: var(--azul); color: #fff; font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 12px 14px; text-align: left;
+}
+.presc-table td {
+  padding: 10px 14px; font-size: 12px; line-height: 1.5; vertical-align: top;
+  border-bottom: 1px solid var(--borda);
+}
+.presc-table tr:nth-child(even) td { background: var(--cinza); }
+.presc-table tr:hover td { background: #EAF0FB; }
+.tag {
+  display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px;
+  border-radius: 99px; margin: 1px; white-space: nowrap;
+}
+.tag-prim { background: #FDECEA; color: var(--vermelho); border: 1px solid var(--vermelho); }
+.tag-comp { background: #E8F4FB; color: var(--teal); border: 1px solid var(--teal); }
+.tag-diario { background: #E8F7EE; color: var(--verde); border: 1px solid var(--verde); }
+.tag-forca { background: #F3E8FB; color: var(--roxo); border: 1px solid var(--roxo); }
+.tag-preaqui { background: #FEF3E7; color: var(--laranja); border: 1px solid var(--laranja); }
+.tag-postre { background: #EAF0FB; color: var(--azul); border: 1px solid var(--azul); }
+
+/* ── CARDS DE QUEIXA ── */
+.queixa-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.queixa-card { background: #fff; border: 1.5px solid var(--borda); border-radius: 14px; overflow: hidden; }
+.queixa-header { padding: 14px 18px; display: flex; align-items: center; gap: 10px; }
+.queixa-titulo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: #fff; }
+.queixa-body { padding: 14px 18px; }
+.queixa-secao { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; color: var(--muted); margin: 10px 0 5px; display: block; }
+.ex-item { font-size: 12px; color: var(--texto); line-height: 1.5; padding: 4px 0; border-bottom: 1px solid var(--cinza); display: flex; align-items: baseline; gap: 6px; }
+.ex-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.justif-box { background: var(--cinza); border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 11px; color: var(--muted); line-height: 1.5; font-style: italic; }
+
+/* ── MICROCICLO ── */
+.micro-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 24px; }
+@media(max-width:800px){ .micro-grid { grid-template-columns: repeat(3,1fr); } }
+.micro-dia { background: #fff; border: 1.5px solid var(--borda); border-radius: 10px; overflow: hidden; }
+.micro-dia-header { padding: 8px 10px; text-align: center; }
+.micro-dia-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 12px; color: #fff; }
+.micro-dia-sub { font-size: 9px; color: rgba(255,255,255,0.7); margin-top: 1px; }
+.micro-dia-body { padding: 8px; }
+.micro-ex { font-size: 10px; color: var(--texto); padding: 3px 0; border-bottom: 1px solid var(--cinza); line-height: 1.4; }
+.micro-ex:last-child { border-bottom: none; }
+.micro-ex b { color: var(--azul); }
+
+/* ── HOOPER DECISION ── */
+.hooper-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+@media(max-width:700px){ .hooper-grid { grid-template-columns: 1fr; } }
+.hooper-card { border-radius: 12px; padding: 18px; }
+.hooper-zona { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 4px; }
+.hooper-range { font-size: 11px; margin-bottom: 12px; opacity: 0.8; }
+.hooper-item { font-size: 12px; line-height: 1.5; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+.hooper-item:last-child { border-bottom: none; }
+.h-ok { background: linear-gradient(135deg, #1A7A4A, #009933); color: #fff; }
+.h-atencao { background: linear-gradient(135deg, #B8860B, #D4A017); color: #fff; }
+.h-risco { background: linear-gradient(135deg, #C0392B, #E74C3C); color: #fff; }
+
+footer { border-top: 1px solid var(--borda); padding: 20px 32px; text-align: center; font-size: 12px; color: var(--muted); font-style: italic; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div style="display:flex;align-items:center">
+      <span class="header-badge">BeachMed</span>
+      <div>
+        <div class="header-title">Guia de Prescrição de Exercícios</div>
+        <div class="header-sub">Seleção Brasileira Feminina de Beach Soccer — Cadeia Cinética Integrada</div>
+      </div>
+    </div>
+    <a href="./index.html" class="back-btn">← Banco de Exercícios</a>
+  </div>
+</header>
+
+<div class="tabs-wrapper">
+  <div class="tabs-inner">
+    <button class="tab-btn ativo" onclick="trocarTab('queixas', this)">🩺 Por Queixa</button>
+    <button class="tab-btn" onclick="trocarTab('momento', this)">⏱️ Por Momento</button>
+    <button class="tab-btn" onclick="trocarTab('microciclo', this)">📅 Microciclo Semanal</button>
+    <button class="tab-btn" onclick="trocarTab('hooper', this)">🚦 Decisão por Hooper</button>
+    <button class="tab-btn" onclick="trocarTab('cadeia', this)">🔗 Cadeia Cinética</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABA 1: POR QUEIXA -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="tab-queixas" class="painel ativo">
+  <div class="intro-box">
+    <div class="intro-badge">Abordagem por Queixa</div>
+    <h2>Prescrição Baseada na Queixa da Atleta</h2>
+    <p>Cada queixa exige exercícios prioritários (tratar a causa) + exercícios complementares (tratar a cadeia cinética). 
+    Baseado no conceito Joint-by-Joint (Cook & Burton) e na abordagem de cadeia cinética fechada para beach soccer.</p>
+  </div>
+
+  <div class="queixa-grid">
+
+    <!-- LOMBAR -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#B5451B">
+        <div class="queixa-titulo">🔙 Queixa Lombar</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Prancha Frontal (Dead Bug + Bird Dog)</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Mobilização de Flexores do Quadril (Iliopsoas)</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Estabilização Lombar em Areia</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Propriocepção de Tornozelo — déficit de tornozelo força compensação lombar</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Nordic Hamstring — isquiotibiais encurtados aumentam retroversão pélvica</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Thrust — glúteo fraco transfere carga para lombar</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Trendelenburg Reverso — glúteo médio fraco causa inclinação pélvica lateral</div>
+
+        <div class="justif-box">💡 Lombalgia em beach soccer está associada a fraqueza de glúteo médio, encurtamento de iliopsoas e déficit de controle neuromuscular de tornozelo — que forçam compensações na coluna lombar durante cabeçadas e rematas.</div>
+      </div>
+    </div>
+
+    <!-- TORNOZELO -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#1A6B9A">
+        <div class="queixa-titulo">🦶 Queixa de Tornozelo</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>SEBT — Star Excursion Balance Test como treino</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Fortalecimento Fibular com Theraband</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Mobilização Dorsiflexão Talocrural com Band</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Propriocepção Progressiva em Areia</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Step-Down Excêntrico — controle de joelho na aterrissagem</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Trendelenburg Reverso — glúteo médio estabiliza toda a cadeia inferior</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#2E6B8A"></span>Elevação de Calcâneos Excêntrica — panturrilha como estabilizadora distal</div>
+
+        <div class="justif-box">💡 Déficit de dorsiflexão talocrural aumenta valgo dinâmico de joelho e sobrecarga lombar. Tornozelo instável compromete toda a cadeia cinética ascendente (bottom-up kinetic chain — Cook, 2010).</div>
+      </div>
+    </div>
+
+    <!-- JOELHO -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#7B2D8B">
+        <div class="queixa-titulo">🦵 Queixa de Joelho</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Nordic Hamstring Curl — prevenção de isquiotibiais</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Step-Down Excêntrico — controle patelar</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Agachamento Unilateral com Controle de Valgo</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Copenhagen Adductor Exercise — estabilidade medial</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>Mobilização de Dorsiflexão — dorsiflexão restrita aumenta valgo de joelho</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Thrust + Trendelenburg — fraqueza de quadril aumenta carga no joelho</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Reverse Nordic — fortalecimento excêntrico de quadríceps</div>
+
+        <div class="justif-box">💡 Valgo dinâmico de joelho em atletas femininas é causa primária de lesão de LCA. Origina-se na combinação de fraqueza de quadril (top-down) + déficit de dorsiflexão (bottom-up). Abordar as duas origens simultaneamente.</div>
+      </div>
+    </div>
+
+    <!-- COXA ANTERIOR -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#A0522D">
+        <div class="queixa-titulo">💪 Queixa de Coxa Anterior (Quadríceps / Iliopsoas)</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Reverse Nordic Curl — excêntrico de quadríceps</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Lunge Excêntrico com Controle de Flexores</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Mobilização de Flexores do Quadril</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Agachamento Excêntrico Unilateral em Areia</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Bird Dog + Dead Bug — core reduz sobrecarga de flexores do quadril</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Thrust — glúteo ativo inibe hiperativação do iliopsoas compensatório</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#7B2D8B"></span>Nordic Hamstring — equilíbrio Q:I protege quadríceps de sobrecarga isolada</div>
+
+        <div class="justif-box">💡 No beach soccer, a areia aumenta a demanda excêntrica do quadríceps em 23–35% vs. gramado. Iliopsoas hiperativo compensa glúteo inibido — treinar ativação glútea junto é essencial.</div>
+      </div>
+    </div>
+
+    <!-- COXA POSTERIOR -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#8B4513">
+        <div class="queixa-titulo">💪 Queixa de Coxa Posterior (Isquiotibiais)</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#8B4513"></span>Nordic Hamstring Curl — protocolo progressivo</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#8B4513"></span>Leg Curl Excêntrico (cadeira flexora)</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#8B4513"></span>Frenagem em Areia — desaceleração progressiva</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#8B4513"></span>Posterior Chain Activation Lunge</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Dead Bug + Bird Dog — core estabilizado reduz tensão de isquiotibiais</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Thrust — glúteo ativo distribui carga isquiotibial</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Reverse Nordic — equilíbrio Q:I — alvo ≥ 60%</div>
+
+        <div class="justif-box">💡 Nordic Hamstring reduz em 50% a taxa de lesão de isquiotibiais (van Dyk et al., 2019). Meta-análise com 8.459 atletas. Isquiotibiais encurtados também aumentam retroversão pélvica e lombalgia — conexão direta com queixa lombar.</div>
+      </div>
+    </div>
+
+    <!-- QUADRIL / VIRILHA -->
+    <div class="queixa-card">
+      <div class="queixa-header" style="background:#1A7A4A">
+        <div class="queixa-titulo">🏃 Queixa de Quadril / Virilha / Adutores</div>
+      </div>
+      <div class="queixa-body">
+        <span class="queixa-secao">🎯 Exercícios Prioritários</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Copenhagen Adductor Exercise — protocolo progressivo</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Thrust Unilateral em Areia</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Trendelenburg Reverso — glúteo médio</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A7A4A"></span>Hip Circumduction Walk — mobilidade dinâmica</div>
+
+        <span class="queixa-secao">🔗 Exercícios Complementares (Cadeia Cinética)</span>
+        <div class="ex-item"><span class="ex-dot" style="background:#B5451B"></span>Core — instabilidade lombar sobrecarrega quadril compensatoriamente</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#A0522D"></span>Lunge com controle de flexores — iliopsoas comprime articulação coxofemoral</div>
+        <div class="ex-item"><span class="ex-dot" style="background:#1A6B9A"></span>SEBT — tornozelo instável altera mecânica de quadril</div>
+
+        <div class="justif-box">💡 CAE é o único exercício amplamente validado para prevenção de dor em virilha em futebol. Revisão sistemática 2026 com 1.099 participantes confirma melhora de força excêntrica e redução de sintomas.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABA 2: POR MOMENTO -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="tab-momento" class="painel">
+  <div class="intro-box">
+    <div class="intro-badge">Timing de Prescrição</div>
+    <h2>Quando Fazer Cada Exercício?</h2>
+    <p>O momento de aplicação é tão importante quanto o exercício em si. A literatura de futebol indica que o timing influencia a adaptação neuromuscular, a recuperação e a eficácia preventiva.</p>
+  </div>
+
+  <table class="presc-table">
+    <thead>
+      <tr>
+        <th>Exercício / Grupo</th>
+        <th>Melhor Momento</th>
+        <th>Frequência Ideal</th>
+        <th>Justificativa Científica</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>FIFA 11+ Beach</b><br>Aquecimento neuromuscular completo</td>
+        <td><span class="tag tag-preaqui">Pré-treino</span><span class="tag tag-preaqui">Pré-jogo (partes 1+3)</span></td>
+        <td>2–3x/semana mínimo</td>
+        <td>Eficácia comprovada apenas quando aplicado como aquecimento. Pré-jogo: apenas corrida (partes 1 e 3) — não fazer força antes de jogo. Barengo et al., 2014</td>
+      </tr>
+      <tr>
+        <td><b>Nordic Hamstring Curl</b><br>Excêntrico de isquiotibiais</td>
+        <td><span class="tag tag-forca">Treino de força</span><span class="tag tag-preaqui">Pré-treino (após aquecimento)</span></td>
+        <td>2x/semana — nunca 2 dias seguidos</td>
+        <td>Nordic pós-ativação neural melhora força excêntrica. Deve ser feito após aquecimento, nunca frio. Evitar no dia anterior a jogo. Al Attar et al., 2017</td>
+      </tr>
+      <tr>
+        <td><b>Propriocepção de Tornozelo</b><br>SEBT, Fibular, Equilíbrio unipodal</td>
+        <td><span class="tag tag-preaqui">Pré-treino (aquecimento)</span><span class="tag tag-diario">Diariamente (atletas com queixa ativa)</span></td>
+        <td>Diário em atletas com histórico de entorse. 3x/semana em prevenção primária</td>
+        <td>Treino proprioceptivo diário reduz recidiva de entorse em 47%. Curto prazo (5–15 min) tem melhor custo-benefício. Gribble et al., 2012</td>
+      </tr>
+      <tr>
+        <td><b>Reverse Nordic + Lunge Excêntrico</b><br>Quadríceps / Iliopsoas</td>
+        <td><span class="tag tag-forca">Treino de força</span><span class="tag tag-preaqui">Aquecimento (versão leve)</span></td>
+        <td>2x/semana no treino de força</td>
+        <td>Excêntrico de quadríceps como aquecimento (versão parcial) ativa reto femoral. Versão completa como treino de força separado. Mendiguchia et al., 2013</td>
+      </tr>
+      <tr>
+        <td><b>Copenhagen Adductor (CAE)</b><br>Adutores / Virilha</td>
+        <td><span class="tag tag-forca">Treino de força</span></td>
+        <td>2x/semana. Volume progressivo (semana 1: 3x8 → semana 6: 3x12)</td>
+        <td>CAE requer progressão de carga — não é exercício de aquecimento. Alta intensidade excêntrica — evitar pré-jogo. Cesari et al., 2026</td>
+      </tr>
+      <tr>
+        <td><b>Prancha / Core (Dead Bug, Bird Dog)</b><br>Estabilização lombar</td>
+        <td><span class="tag tag-preaqui">Pré-treino (aquecimento)</span><span class="tag tag-forca">Treino de força</span><span class="tag tag-diario">Diário (queixa lombar ativa)</span></td>
+        <td>Diário em atletas com queixa lombar. 3x/semana em prevenção</td>
+        <td>Core como aquecimento ativa estabilizadores profundos antes do treino. Exercícios de baixa carga podem ser feitos diariamente sem fadiga acumulada. McGill, 2010</td>
+      </tr>
+      <tr>
+        <td><b>Hip Thrust + Trendelenburg</b><br>Glúteo médio e máximo</td>
+        <td><span class="tag tag-forca">Treino de força</span></td>
+        <td>2–3x/semana. Não realizar no dia anterior a jogo (fadiga glútea altera mecânica de aterrissagem)</td>
+        <td>Glúteo como estabilizador primário da cadeia cinética inferior. Fraqueza de glúteo médio associada a lombalgia, valgo de joelho e instabilidade de tornozelo.</td>
+      </tr>
+      <tr>
+        <td><b>Foam Rolling + Alongamento Estático</b><br>Liberação miofascial</td>
+        <td><span class="tag tag-postre">Pós-treino / Pós-jogo</span></td>
+        <td>Após todo treino/jogo intenso. Aguardar 30 min para alongamento estático</td>
+        <td>Foam rolling pré-treino pode reduzir força máxima — usar apenas pós-treino. Alongamento estático imediato pós-jogo aumenta microlesão. Woods et al., 2007; Pearcey et al., 2015</td>
+      </tr>
+      <tr>
+        <td><b>Crioterapia / CWI</b><br>Recuperação neuromuscular</td>
+        <td><span class="tag tag-postre">Pós-treino intenso / Pós-jogo</span></td>
+        <td>Após treinos PSE ≥ 7 e após todos os jogos</td>
+        <td>Não usar antes de treino de força — reduz adaptação hipertrófica. Melhor eficácia nas primeiras 2h pós-esforço. Tavares et al., 2022</td>
+      </tr>
+      <tr>
+        <td><b>Pliometria Preventiva</b><br>Salto e aterrissagem</td>
+        <td><span class="tag tag-forca">Treino de força</span></td>
+        <td>1–2x/semana. Nunca no dia anterior a jogo</td>
+        <td>Pliometria induz DOMS nas 24–72h. Programar no mínimo 48h antes de jogo ou treino técnico intenso. Barengo et al., 2014</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABA 3: MICROCICLO SEMANAL -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="tab-microciclo" class="painel">
+  <div class="intro-box">
+    <div class="intro-badge">Microciclo Tipo</div>
+    <h2>Distribuição Semanal dos Exercícios Preventivos</h2>
+    <p>Modelo para semana com 1 jogo (domingo). Adaptado da literatura de futebol feminino de alto rendimento para as demandas específicas do beach soccer.</p>
+  </div>
+
+  <div class="micro-grid">
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#1A7A4A">
+        <div class="micro-dia-titulo">SEG</div>
+        <div class="micro-dia-sub">Recuperação</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>CWI</b> ou crioterapia localizada</div>
+        <div class="micro-ex"><b>Foam Rolling</b> completo</div>
+        <div class="micro-ex"><b>Mobilidade articular</b> suave</div>
+        <div class="micro-ex"><b>Hidratação</b> + nutrição recuperação</div>
+        <div class="micro-ex" style="color:#888;font-style:italic">Sem exercício preventivo de carga</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#1A3F80">
+        <div class="micro-dia-titulo">TER</div>
+        <div class="micro-dia-sub">Força + Prevenção</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+</b> aquecimento completo</div>
+        <div class="micro-ex"><b>Nordic Hamstring</b> — 3x6 rep</div>
+        <div class="micro-ex"><b>Copenhagen CAE</b> — 3x8</div>
+        <div class="micro-ex"><b>Hip Thrust</b> bilateral + unilateral</div>
+        <div class="micro-ex"><b>Prancha / Dead Bug</b></div>
+        <div class="micro-ex"><b>Foam Rolling</b> pós-treino</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#B5451B">
+        <div class="micro-dia-titulo">QUA</div>
+        <div class="micro-dia-sub">Técnico + Prop.</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+ partes 1+3</b> aquecimento</div>
+        <div class="micro-ex"><b>Propriocepção tornozelo</b> — SEBT</div>
+        <div class="micro-ex"><b>Exercício técnico</b> específico</div>
+        <div class="micro-ex"><b>Core leve</b> (prancha, bird dog)</div>
+        <div class="micro-ex"><b>Mobilização dorsiflexão</b> com band</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#1A3F80">
+        <div class="micro-dia-titulo">QUI</div>
+        <div class="micro-dia-sub">Força + Pliomet.</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+</b> aquecimento completo</div>
+        <div class="micro-ex"><b>Reverse Nordic</b> — quadríceps</div>
+        <div class="micro-ex"><b>Pliometria preventiva</b> — saltos</div>
+        <div class="micro-ex"><b>Trendelenburg</b> + Hip Abduction</div>
+        <div class="micro-ex"><b>Frenagem em areia</b></div>
+        <div class="micro-ex"><b>CWI</b> se PSE ≥ 7</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#7B2D8B">
+        <div class="micro-dia-titulo">SEX</div>
+        <div class="micro-dia-sub">Ativação Leve</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+ partes 1+3</b> apenas</div>
+        <div class="micro-ex"><b>Propriocepção tornozelo</b> leve</div>
+        <div class="micro-ex"><b>Mobilidade articular</b></div>
+        <div class="micro-ex"><b>Core ativação leve</b></div>
+        <div class="micro-ex" style="color:#888;font-style:italic">Sem excêntrico pesado</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#C0392B">
+        <div class="micro-dia-titulo">SÁB</div>
+        <div class="micro-dia-sub">Pré-Jogo</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+ partes 1+3</b> apenas</div>
+        <div class="micro-ex"><b>Ativação glútea leve</b></div>
+        <div class="micro-ex"><b>Mobilidade de tornozelo</b></div>
+        <div class="micro-ex" style="color:#888;font-style:italic">Sem força / sem excêntrico</div>
+        <div class="micro-ex" style="color:#888;font-style:italic">Sem pliometria</div>
+      </div>
+    </div>
+    <div class="micro-dia">
+      <div class="micro-dia-header" style="background:#0D2A5E">
+        <div class="micro-dia-titulo">DOM</div>
+        <div class="micro-dia-sub">Jogo</div>
+      </div>
+      <div class="micro-dia-body">
+        <div class="micro-ex"><b>FIFA 11+ partes 1+3</b> pré-jogo</div>
+        <div class="micro-ex"><b>CWI</b> pós-jogo imediato</div>
+        <div class="micro-ex"><b>Foam Rolling</b> pós-jogo</div>
+        <div class="micro-ex"><b>Nutrição/hidratação</b> janela 30 min</div>
+        <div class="micro-ex"><b>Hooper Index</b> monitoramento</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="justif-box" style="font-size:12px;padding:14px 18px">
+    ⚠️ <b>Regra de ouro:</b> exercícios excêntricos pesados (Nordic, CAE, Reverse Nordic, Pliometria) devem ser programados com mínimo 48–72h antes de jogo ou treino técnico de alta intensidade. Scheduling of Eccentric Exercises — soccer microcycle (Buchheit et al., 2018).
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABA 4: DECISÃO POR HOOPER -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="tab-hooper" class="painel">
+  <div class="intro-box">
+    <div class="intro-badge">Decisão Clínica</div>
+    <h2>Adaptação da Prescrição pelo Hooper Index</h2>
+    <p>Os dados do BEACHMED SYSTEM mostram que 88,3% dos dias a equipe está fora da zona OK. A prescrição deve se adaptar ao estado de bem-estar real da atleta.</p>
+  </div>
+
+  <div class="hooper-grid">
+    <div class="hooper-card h-ok">
+      <div class="hooper-zona">✅ ZONA OK</div>
+      <div class="hooper-range">Soma Hooper ≤ 15 | 11,7% dos dias</div>
+      <div class="hooper-item">✔ Protocolo completo — FIFA 11+ integral</div>
+      <div class="hooper-item">✔ Nordic Hamstring na dose máxima</div>
+      <div class="hooper-item">✔ Pliometria preventiva autorizada</div>
+      <div class="hooper-item">✔ Copenhagen CAE carga total</div>
+      <div class="hooper-item">✔ Treino de força completo</div>
+      <div class="hooper-item">✔ Todos os exercícios excêntricos</div>
+    </div>
+    <div class="hooper-card h-atencao">
+      <div class="hooper-zona">⚠️ ZONA ATENÇÃO</div>
+      <div class="hooper-range">Soma Hooper 16–20 | 57,9% dos dias</div>
+      <div class="hooper-item">✔ FIFA 11+ partes 1+3 (corrida)</div>
+      <div class="hooper-item">✔ Propriocepção de tornozelo</div>
+      <div class="hooper-item">✔ Core leve (prancha, bird dog)</div>
+      <div class="hooper-item">⚠ Nordic Hamstring — reduzir 30% volume</div>
+      <div class="hooper-item">⚠ Pliometria — apenas nível 1</div>
+      <div class="hooper-item">✗ Sem CAE carga máxima</div>
+      <div class="hooper-item">✗ Sem excêntrico bilateral pesado</div>
+    </div>
+    <div class="hooper-card h-risco">
+      <div class="hooper-zona">🔴 ZONA RISCO</div>
+      <div class="hooper-range">Soma Hooper > 20 | 30,5% dos dias</div>
+      <div class="hooper-item">✔ FIFA 11+ partes 1+3 apenas</div>
+      <div class="hooper-item">✔ Mobilidade articular suave</div>
+      <div class="hooper-item">✔ Foam Rolling + crioterapia</div>
+      <div class="hooper-item">✗ Sem excêntrico de qualquer tipo</div>
+      <div class="hooper-item">✗ Sem pliometria</div>
+      <div class="hooper-item">✗ Sem CAE</div>
+      <div class="hooper-item">🚨 Sono ≤ 3 por 2 dias: comunicar comissão técnica imediatamente</div>
+    </div>
+  </div>
+
+  <table class="presc-table">
+    <thead>
+      <tr><th>Dimensão Hooper Comprometida</th><th>Score ≥ 4</th><th>Conduta Fisioterapêutica</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Sono comprometido</b> (86,7% dos dias)</td><td>≥ 4</td><td>Reduzir volume excêntrico em 30%. Priorizar recuperação ativa. Comunicar comissão se 2 dias consecutivos</td></tr>
+      <tr><td><b>Dor muscular alta</b> (55,6% dos dias)</td><td>≥ 4</td><td>Substituir excêntrico pesado por versão isométrica. Foam Rolling antes do treino. Crioterapia localizada pós</td></tr>
+      <tr><td><b>Fadiga alta</b> (48,2% dos dias)</td><td>≥ 4</td><td>Reduzir PSE alvo da sessão em 1–2 pontos. Manter propriocepção e mobilidade. Cancelar pliometria</td></tr>
+      <tr><td><b>Estresse alto</b> (55,1% dos dias)</td><td>≥ 4</td><td>Manter treino técnico (melhora humor). Reduzir treino físico intenso. Incluir respiração/relaxamento pós-treino</td></tr>
+      <tr><td><b>Humor baixo</b> (63,2% dos dias)</td><td>≥ 4</td><td>Treino técnico-tático tem efeito positivo no humor. Evitar sessões monótonas de força isolada. Envolver psicólogo esportivo se 5+ dias consecutivos</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- ABA 5: CADEIA CINÉTICA -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="tab-cadeia" class="painel">
+  <div class="intro-box">
+    <div class="intro-badge">Cadeia Cinética Integrada</div>
+    <h2>Por que Tratar Além da Região de Dor?</h2>
+    <p>O conceito Joint-by-Joint (Cook & Burton, 2006) e a literatura de biomecânica esportiva demonstram que disfunções em uma articulação geram compensações nas articulações adjacentes. No beach soccer, a instabilidade da areia amplifica essas compensações.</p>
+  </div>
+
+  <table class="presc-table">
+    <thead>
+      <tr>
+        <th>Disfunção Primária</th>
+        <th>Compensação Ascendente</th>
+        <th>Compensação Descendente</th>
+        <th>Exercício Integrador</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Déficit de Dorsiflexão de Tornozelo</b></td>
+        <td>Valgo dinâmico de joelho → tensão de LCA e patelar</td>
+        <td>Pronação excessiva do pé → fasciíte plantar</td>
+        <td>Mobilização dorsiflexão + Agachamento unipodal em areia</td>
+      </tr>
+      <tr>
+        <td><b>Instabilidade de Tornozelo</b></td>
+        <td>Rotação interna de joelho → joelho valgo → sobrecarga lombar</td>
+        <td>Apoio plantar alterado → sobrecarga fascial</td>
+        <td>SEBT + propriocepção progressiva em areia</td>
+      </tr>
+      <tr>
+        <td><b>Fraqueza de Glúteo Médio</b></td>
+        <td>Sobrecarga lombar (pélvis inclina lateralmente)</td>
+        <td>Valgo de joelho → tensão patelofemoral</td>
+        <td>Trendelenburg reverso + Hip Abduction Walk</td>
+      </tr>
+      <tr>
+        <td><b>Isquiotibiais Encurtados</b></td>
+        <td>Retroversão pélvica → hipercifose torácica</td>
+        <td>Tensão posterior de joelho → limitação de agachamento</td>
+        <td>Nordic Hamstring + Posterior Chain Activation Lunge</td>
+      </tr>
+      <tr>
+        <td><b>Iliopsoas Hiperativo / Encurtado</b></td>
+        <td>Hiperlordose lombar → lombalgia crônica</td>
+        <td>Inibição recíproca do glúteo → fraqueza glútea secundária</td>
+        <td>Mobilização flexores + Hip Thrust (ativa glúteo)</td>
+      </tr>
+      <tr>
+        <td><b>Core Instável</b></td>
+        <td>Sobrecarga de estruturas passivas (ligamentos, discos)</td>
+        <td>Transferência de força ineficiente → sobrecarga de quadril e joelho</td>
+        <td>Dead Bug + Bird Dog + Prancha com progressão</td>
+      </tr>
+      <tr>
+        <td><b>Fraqueza de Adutores</b></td>
+        <td>Valgo de joelho durante mudanças de direção</td>
+        <td>Compensação por rotação interna de quadril</td>
+        <td>Copenhagen CAE + Adductor Band Walk</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="justif-box" style="font-size:12px;padding:16px 18px;margin-top:8px">
+    <b>📚 Base Científica:</b> Cook G, Burton L. <i>Movement: Functional Movement Systems.</i> 2010. | 
+    Rethinking knee injury prevention: joint-by-joint training approach paradigm. PMC, 2025. | 
+    Effects of hip- and ankle-focused exercise on dynamic knee valgus. PMC, 2021. | 
+    Leporace G, Metsavaht L. <i>Importância do treinamento da propriocepção e do controle motor.</i> Acta Fisiátrica. 2009;16(3):126-131.
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <strong>BEACHMED SYSTEM</strong> — Seleção Brasileira Feminina de Beach Soccer &nbsp;|&nbsp;
+  Fisioterapeuta Gabriella Costa Vila Real &nbsp;|&nbsp;
+  <em>"Além da areia, existe ciência"</em>
+</footer>
+
+<script>
+function trocarTab(id, btn) {
+  document.querySelectorAll('.painel').forEach(p => p.classList.remove('ativo'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+  document.getElementById('tab-' + id).classList.add('ativo');
+  btn.classList.add('ativo');
+}
+</script>
+</body>
+</html>

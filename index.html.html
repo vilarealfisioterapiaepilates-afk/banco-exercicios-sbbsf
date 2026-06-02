@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco de Exercícios — SBBSF</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul:    #0D2A5E;
+    --azul2:   #1A3F80;
+    --amarelo: #F5C500;
+    --verde:   #009933;
+    --vermelho:#C0392B;
+    --laranja: #E67E22;
+    --cinza:   #F0F3F8;
+    --borda:   #DDE3EE;
+    --texto:   #1A1A2E;
+    --muted:   #6B7A99;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F7F9FD;
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--azul);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(13,42,94,0.18);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-brand { display: flex; align-items: center; gap: 14px; }
+  .header-badge {
+    background: var(--amarelo);
+    color: var(--azul);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .header-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.55);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 24px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--amarelo);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  /* ── FILTROS ── */
+  .filtros-wrapper {
+    background: #fff;
+    border-bottom: 1px solid var(--borda);
+    position: sticky;
+    top: 73px;
+    z-index: 90;
+  }
+  .filtros-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filtro-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 4px;
+  }
+  .filtro-btn {
+    border: 1.5px solid var(--borda);
+    background: #fff;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .filtro-btn:hover { border-color: var(--azul); color: var(--azul); }
+  .filtro-btn.ativo {
+    background: var(--azul);
+    border-color: var(--azul);
+    color: #fff;
+  }
+  .filtro-btn[data-regiao="Tornozelo"].ativo  { background: #1A6B9A; border-color: #1A6B9A; }
+  .filtro-btn[data-regiao="Joelho"].ativo     { background: #7B2D8B; border-color: #7B2D8B; }
+  .filtro-btn[data-regiao="Lombar"].ativo     { background: #B5451B; border-color: #B5451B; }
+  .filtro-btn[data-regiao="Quadril"].ativo    { background: #1A7A4A; border-color: #1A7A4A; }
+  .filtro-btn[data-regiao="Coxa"].ativo       { background: #A0522D; border-color: #A0522D; }
+  .filtro-btn[data-regiao="Panturrilha"].ativo{ background: #2E6B8A; border-color: #2E6B8A; }
+  .filtro-btn[data-regiao="Global"].ativo     { background: #0D2A5E; border-color: #0D2A5E; }
+
+  /* ── BUSCA ── */
+  .busca-wrapper {
+    margin-left: auto;
+    position: relative;
+  }
+  .busca-input {
+    border: 1.5px solid var(--borda);
+    border-radius: 99px;
+    padding: 7px 16px 7px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--texto);
+    outline: none;
+    width: 200px;
+    transition: border-color 0.18s;
+  }
+  .busca-input:focus { border-color: var(--azul); }
+  .busca-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* ── GRID ── */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  .grid-info {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: #fff;
+    border: 1.5px solid var(--borda);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    box-shadow: 0 8px 32px rgba(13,42,94,0.10);
+    transform: translateY(-2px);
+  }
+  .card-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--borda);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-regiao-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .card-titulo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--azul);
+    line-height: 1.3;
+    flex: 1;
+  }
+  .card-regiao-tag {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 9px;
+    border-radius: 99px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .card-body { padding: 14px 18px; flex: 1; }
+
+  .param-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .param-box {
+    background: var(--cinza);
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .param-box-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    font-weight: 500;
+    display: block;
+  }
+  .param-box-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--azul);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .secao-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .progressoes {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+  .progressao-item {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--texto);
+    line-height: 1.4;
+  }
+  .prog-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 10px;
+    color: var(--amarelo);
+    background: var(--azul);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .card-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--borda);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .link-input {
+    flex: 1;
+    border: 1.5px solid var(--borda);
+    border-radius: 8px;
+    padding: 7px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--texto);
+    outline: none;
+    transition: border-color 0.15s;
+    min-width: 0;
+  }
+  .link-input:focus { border-color: var(--azul); }
+  .link-input::placeholder { color: var(--muted); font-size: 11px; }
+  .btn-abrir {
+    background: var(--azul);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-abrir:hover { background: var(--azul2); }
+  .btn-abrir:disabled { background: var(--borda); color: var(--muted); cursor: default; }
+
+  /* ── VAZIO ── */
+  .vazio {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    grid-column: 1/-1;
+  }
+  .vazio-icon { font-size: 48px; margin-bottom: 12px; }
+  .vazio-txt { font-size: 15px; }
+
+  /* ── CORES POR REGIÃO ── */
+  .r-tornozelo { background: #E8F4FB; color: #1A6B9A; }
+  .d-tornozelo { background: #1A6B9A; }
+  .r-joelho    { background: #F3E8FB; color: #7B2D8B; }
+  .d-joelho    { background: #7B2D8B; }
+  .r-lombar    { background: #FDECEA; color: #B5451B; }
+  .d-lombar    { background: #B5451B; }
+  .r-quadril   { background: #E8F7EE; color: #1A7A4A; }
+  .d-quadril   { background: #1A7A4A; }
+  .r-coxa      { background: #FBF0E8; color: #A0522D; }
+  .d-coxa      { background: #A0522D; }
+  .r-panturrilha { background: #E8F2FB; color: #2E6B8A; }
+  .d-panturrilha { background: #2E6B8A; }
+  .r-global    { background: #EAF0FB; color: #0D2A5E; }
+  .d-global    { background: #0D2A5E; }
+
+  /* ── RODAPÉ ── */
+  footer {
+    border-top: 1px solid var(--borda);
+    padding: 20px 32px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+  }
+  footer strong { color: var(--azul); font-style: normal; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-badge">BeachMed</div>
+      <div>
+        <div class="header-title">Banco de Exercícios Preventivos</div>
+        <div class="header-sub">Seleção Brasileira Feminina de Beach Soccer</div>
+      </div>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <div class="stat-num" id="total-exercicios">—</div>
+        <div class="stat-label">Exercícios</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">7</div>
+        <div class="stat-label">Regiões</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="total-links">0</div>
+        <div class="stat-label">Vídeos</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="filtros-wrapper">
+  <div class="filtros-inner">
+    <span class="filtro-label">Filtrar:</span>
+    <button class="filtro-btn ativo" data-regiao="Todos" onclick="filtrar('Todos', this)">Todos</button>
+    <button class="filtro-btn" data-regiao="Tornozelo" onclick="filtrar('Tornozelo', this)">🦶 Tornozelo</button>
+    <button class="filtro-btn" data-regiao="Joelho" onclick="filtrar('Joelho', this)">🦵 Joelho</button>
+    <button class="filtro-btn" data-regiao="Lombar" onclick="filtrar('Lombar', this)">🔙 Lombar</button>
+    <button class="filtro-btn" data-regiao="Quadril" onclick="filtrar('Quadril', this)">🏃 Quadril</button>
+    <button class="filtro-btn" data-regiao="Coxa" onclick="filtrar('Coxa', this)">💪 Coxa</button>
+    <button class="filtro-btn" data-regiao="Panturrilha" onclick="filtrar('Panturrilha', this)">🦶 Panturrilha</button>
+    <button class="filtro-btn" data-regiao="Global" onclick="filtrar('Global', this)">⚡ Global</button>
+    <div class="busca-wrapper">
+      <span class="busca-icon">🔍</span>
+      <input class="busca-input" type="text" placeholder="Buscar exercício..." oninput="buscar(this.value)" />
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="grid-info" id="grid-info"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <strong>BEACHMED SYSTEM</strong> — Seleção Brasileira Feminina de Beach Soccer &nbsp;|&nbsp;
+  Fisioterapeuta Gabriella Costa Vila Real &nbsp;|&nbsp;
+  <em>"Além da areia, existe ciência"</em>
+</footer>
+
+<script>
+const EXERCICIOS = [
+  // ── TORNOZELO ───────────────────────────────────────────────
+  {
+    regiao: "Tornozelo",
+    titulo: "Propriocepção em Superfície Instável",
+    series: "3", reps: "30 seg", descanso: "45 seg",
+    progressoes: [
+      "Fase 1: apoio unipodal em solo firme com olhos abertos",
+      "Fase 2: apoio unipodal em disco proprioceptivo",
+      "Fase 3: apoio unipodal em areia seca",
+      "Fase 4: areia + gestos específicos (cabeçada, remate)"
+    ]
+  },
+  {
+    regiao: "Tornozelo",
+    titulo: "Fortalecimento de Fibular com Theraband",
+    series: "3", reps: "15–20 rep", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: eversão sentada com faixa leve",
+      "Fase 2: eversão em pé com faixa média",
+      "Fase 3: exercício funcional em apoio unipodal",
+      "Fase 4: saltos laterais com aterrissagem controlada"
+    ]
+  },
+  {
+    regiao: "Tornozelo",
+    titulo: "Mobilização de Dorsiflexão Talocrural",
+    series: "3", reps: "10 rep cada lado", descanso: "20 seg",
+    progressoes: [
+      "Fase 1: estiramentos ativos de gastrocnêmio",
+      "Fase 2: mobilização articular passiva com fisioterapeuta",
+      "Fase 3: agachamento com calcanhares elevados",
+      "Fase 4: agachamento profundo em areia"
+    ]
+  },
+  {
+    regiao: "Tornozelo",
+    titulo: "Salto Lateral com Aterrissagem Controlada",
+    series: "4", reps: "8 rep cada lado", descanso: "60 seg",
+    progressoes: [
+      "Fase 1: deslocamento lateral sem salto, foco no controle",
+      "Fase 2: salto pequeno lateral em solo firme",
+      "Fase 3: salto lateral em areia, aterrissagem unipodal",
+      "Fase 4: salto + mudança de direção imediata em areia"
+    ]
+  },
+
+  // ── JOELHO ──────────────────────────────────────────────────
+  {
+    regiao: "Joelho",
+    titulo: "Nordic Hamstring Curl",
+    series: "3", reps: "6–8 rep", descanso: "90 seg",
+    progressoes: [
+      "Fase 1: excêntrico parcial com apoio nas mãos",
+      "Fase 2: excêntrico completo sem apoio",
+      "Fase 3: excêntrico em superfície instável",
+      "Fase 4: nordic em areia + concêntrico com elástico"
+    ]
+  },
+  {
+    regiao: "Joelho",
+    titulo: "Step-Down Excêntrico",
+    series: "3", reps: "10–12 rep cada perna", descanso: "60 seg",
+    progressoes: [
+      "Fase 1: step de 10 cm, velocidade controlada",
+      "Fase 2: step de 20 cm, olhos fechados",
+      "Fase 3: step em superfície instável",
+      "Fase 4: step em areia com carga adicional"
+    ]
+  },
+  {
+    regiao: "Joelho",
+    titulo: "Agachamento Unilateral (Pistol Squat)",
+    series: "4", reps: "8 rep cada perna", descanso: "60 seg",
+    progressoes: [
+      "Fase 1: agachamento bilateral com controle de joelho",
+      "Fase 2: agachamento unilateral com apoio",
+      "Fase 3: pistol squat livre em solo firme",
+      "Fase 4: pistol squat em areia"
+    ]
+  },
+  {
+    regiao: "Joelho",
+    titulo: "Agachamento Excêntrico com Carga",
+    series: "3", reps: "8 rep (3s descida)", descanso: "90 seg",
+    progressoes: [
+      "Fase 1: excêntrico bilateral 3s sem carga",
+      "Fase 2: excêntrico bilateral com carga",
+      "Fase 3: excêntrico unilateral sem carga",
+      "Fase 4: excêntrico unilateral com colete em areia"
+    ]
+  },
+
+  // ── LOMBAR ──────────────────────────────────────────────────
+  {
+    regiao: "Lombar",
+    titulo: "Estabilização Lombar — Prancha",
+    series: "3", reps: "40–60 seg", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: prancha frontal em cotovelos",
+      "Fase 2: prancha com elevação alternada de perna",
+      "Fase 3: prancha em superfície instável (BOSU)",
+      "Fase 4: prancha em areia com variações de membros"
+    ]
+  },
+  {
+    regiao: "Lombar",
+    titulo: "Dead Bug",
+    series: "3", reps: "10 rep cada lado", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: extensão de perna alternada",
+      "Fase 2: extensão de braço + perna opostos",
+      "Fase 3: com bola suíça entre joelhos",
+      "Fase 4: com elástico de resistência nos pés"
+    ]
+  },
+  {
+    regiao: "Lombar",
+    titulo: "Bird Dog",
+    series: "3", reps: "12 rep cada lado", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: extensão alternada em 4 apoios",
+      "Fase 2: pausa de 3s na posição estendida",
+      "Fase 3: em superfície instável (colchão, areia)",
+      "Fase 4: com carga no tornozelo em areia"
+    ]
+  },
+  {
+    regiao: "Lombar",
+    titulo: "Mobilização de Flexores do Quadril",
+    series: "3", reps: "45 seg cada lado", descanso: "15 seg",
+    progressoes: [
+      "Fase 1: alongamento de iliopsoas em ajoelhado",
+      "Fase 2: alongamento com rotação de tronco",
+      "Fase 3: liberação miofascial com rolo",
+      "Fase 4: estiramento ativo com contração glútea"
+    ]
+  },
+
+  // ── QUADRIL ─────────────────────────────────────────────────
+  {
+    regiao: "Quadril",
+    titulo: "Fortalecimento de Glúteo Médio — Clamshell",
+    series: "3", reps: "15–20 rep cada lado", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: clamshell sem resistência",
+      "Fase 2: clamshell com mini band",
+      "Fase 3: clamshell em pé com elástico",
+      "Fase 4: abdução em pé unipodal em areia"
+    ]
+  },
+  {
+    regiao: "Quadril",
+    titulo: "Hip Thrust",
+    series: "4", reps: "12 rep", descanso: "60 seg",
+    progressoes: [
+      "Fase 1: elevação de quadril bilateral sem carga",
+      "Fase 2: bilateral com halter no quadril",
+      "Fase 3: unilateral sem carga",
+      "Fase 4: unilateral em superfície instável"
+    ]
+  },
+  {
+    regiao: "Quadril",
+    titulo: "Controle de Quadril — Trendelenburg Reverso",
+    series: "3", reps: "12 rep cada lado", descanso: "45 seg",
+    progressoes: [
+      "Fase 1: elevação lateral de quadril em pé",
+      "Fase 2: com mini band acima dos joelhos",
+      "Fase 3: variação em apoio unipodal",
+      "Fase 4: apoio unipodal em areia com carga"
+    ]
+  },
+
+  // ── COXA ────────────────────────────────────────────────────
+  {
+    regiao: "Coxa",
+    titulo: "Excêntrico de Isquiotibiais — Leg Curl Excêntrico",
+    series: "3", reps: "8 rep (3s descida)", descanso: "90 seg",
+    progressoes: [
+      "Fase 1: excêntrico bilateral na cadeira flexora",
+      "Fase 2: excêntrico unilateral na cadeira",
+      "Fase 3: nordic curl parcial",
+      "Fase 4: nordic curl completo em areia"
+    ]
+  },
+  {
+    regiao: "Coxa",
+    titulo: "Frenagem em Areia — Desaceleração Progressiva",
+    series: "4", reps: "6 rep cada direção", descanso: "60 seg",
+    progressoes: [
+      "Fase 1: corrida em linha reta com frenagem gradual",
+      "Fase 2: frenagem lateral em areia",
+      "Fase 3: mudança de direção a 45°",
+      "Fase 4: mudança de direção a 90° com gestos de jogo"
+    ]
+  },
+  {
+    regiao: "Coxa",
+    titulo: "Adutor — Exercício de Copenhagen",
+    series: "3", reps: "8–10 rep cada lado", descanso: "90 seg",
+    progressoes: [
+      "Fase 1: adução isométrica deitada com apoio no banco",
+      "Fase 2: Copenhagen lateral com joelho apoiado",
+      "Fase 3: Copenhagen com perna estendida",
+      "Fase 4: Copenhagen completo com pausa de 2s"
+    ]
+  },
+  {
+    regiao: "Coxa",
+    titulo: "Fortalecimento de Quadríceps — Leg Press Excêntrico",
+    series: "3", reps: "10 rep (4s descida)", descanso: "75 seg",
+    progressoes: [
+      "Fase 1: leg press bilateral excêntrico controlado",
+      "Fase 2: leg press unilateral excêntrico",
+      "Fase 3: agachamento unilateral excêntrico livre",
+      "Fase 4: agachamento unilateral em areia com carga"
+    ]
+  },
+
+  // ── PANTURRILHA ─────────────────────────────────────────────
+  {
+    regiao: "Panturrilha",
+    titulo: "Elevação de Calcâneos Excêntrica",
+    series: "3", reps: "15 rep (3s descida)", descanso: "45 seg",
+    progressoes: [
+      "Fase 1: bilateral em solo plano",
+      "Fase 2: unilateral em solo plano",
+      "Fase 3: unilateral com degrau (amplitude total)",
+      "Fase 4: unilateral em areia com carga"
+    ]
+  },
+  {
+    regiao: "Panturrilha",
+    titulo: "Treino de Tibial Anterior com Elástico",
+    series: "3", reps: "15–20 rep", descanso: "30 seg",
+    progressoes: [
+      "Fase 1: dorsiflexão resistida sentada",
+      "Fase 2: dorsiflexão resistida em pé",
+      "Fase 3: marcha no calcanhar em areia",
+      "Fase 4: salto e aterrissagem com foco no tibial"
+    ]
+  },
+
+  // ── GLOBAL ──────────────────────────────────────────────────
+  {
+    regiao: "Global",
+    titulo: "Circuito Preventivo Pré-Treino (Aquecimento)",
+    series: "2", reps: "10 rep cada", descanso: "Sem pausa",
+    progressoes: [
+      "Fase 1: agachamento + clamshell + prancha frontal",
+      "Fase 2: adicionar bird dog + elevação de calcâneo",
+      "Fase 3: executar em areia",
+      "Fase 4: adicionar gestos específicos do beach soccer"
+    ]
+  },
+  {
+    regiao: "Global",
+    titulo: "Protocolo de Recuperação Ativa Pós-Treino",
+    series: "1", reps: "45 seg cada", descanso: "15 seg",
+    progressoes: [
+      "Fase 1: mobilização articular de tornozelo + quadril + lombar",
+      "Fase 2: alongamento dinâmico de isquiotibiais e flexores",
+      "Fase 3: liberação miofascial com rolo (coxa, lombar, glúteo)",
+      "Fase 4: crioterapia localizada em regiões de queixa"
+    ]
+  },
+  {
+    regiao: "Global",
+    titulo: "Treino de Salto e Aterrissagem (Pliometria Preventiva)",
+    series: "4", reps: "6 rep", descanso: "90 seg",
+    progressoes: [
+      "Fase 1: salto vertical com aterrissagem bilateral controlada",
+      "Fase 2: salto com aterrissagem unilateral",
+      "Fase 3: salto + rotação 90° e aterrissagem controlada",
+      "Fase 4: todas as variações em areia"
+    ]
+  },
+];
+
+// Carrega links salvos do localStorage (se disponível)
+const links = {};
+
+function corRegiao(r) {
+  const mapa = {
+    Tornozelo: "#1A6B9A", Joelho: "#7B2D8B", Lombar: "#B5451B",
+    Quadril: "#1A7A4A", Coxa: "#A0522D", Panturrilha: "#2E6B8A", Global: "#0D2A5E"
+  };
+  return mapa[r] || "#0D2A5E";
+}
+
+function classeRegiao(r) {
+  return r.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+}
+
+let filtroAtual = "Todos";
+let buscaAtual = "";
+
+function renderizar() {
+  const grid = document.getElementById("grid");
+  const info = document.getElementById("grid-info");
+  grid.innerHTML = "";
+
+  const filtrados = EXERCICIOS.filter(e => {
+    const matchRegiao = filtroAtual === "Todos" || e.regiao === filtroAtual;
+    const matchBusca  = buscaAtual === "" ||
+      e.titulo.toLowerCase().includes(buscaAtual.toLowerCase()) ||
+      e.regiao.toLowerCase().includes(buscaAtual.toLowerCase());
+    return matchRegiao && matchBusca;
+  });
+
+  info.textContent = `${filtrados.length} exercício${filtrados.length !== 1 ? "s" : ""} encontrado${filtrados.length !== 1 ? "s" : ""}`;
+
+  if (filtrados.length === 0) {
+    grid.innerHTML = `<div class="vazio"><div class="vazio-icon">🔍</div><div class="vazio-txt">Nenhum exercício encontrado</div></div>`;
+    return;
+  }
+
+  filtrados.forEach((ex, idx) => {
+    const cr  = classeRegiao(ex.regiao);
+    const cor = corRegiao(ex.regiao);
+    const id  = EXERCICIOS.indexOf(ex);
+    const linkSalvo = links[id] || "";
+
+    const progressoesHTML = ex.progressoes.map((p, i) =>
+      `<div class="progressao-item">
+        <span class="prog-num">${i+1}</span>
+        <span>${p}</span>
+      </div>`
+    ).join("");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="card-regiao-dot d-${cr}" style="background:${cor}"></div>
+        <div class="card-titulo">${ex.titulo}</div>
+        <span class="card-regiao-tag r-${cr}">${ex.regiao}</span>
+      </div>
+      <div class="card-body">
+        <div class="param-row">
+          <div class="param-box">
+            <span class="param-box-label">Séries</span>
+            <span class="param-box-val">${ex.series}</span>
+          </div>
+          <div class="param-box">
+            <span class="param-box-label">Reps / Tempo</span>
+            <span class="param-box-val" style="font-size:11px">${ex.reps}</span>
+          </div>
+          <div class="param-box">
+            <span class="param-box-label">Descanso</span>
+            <span class="param-box-val" style="font-size:11px">${ex.descanso}</span>
+          </div>
+        </div>
+        <span class="secao-label">Progressões</span>
+        <div class="progressoes">${progressoesHTML}</div>
+      </div>
+      <div class="card-footer">
+        <input class="link-input" type="url" placeholder="Cole o link do YouTube aqui..."
+          value="${linkSalvo}" onchange="salvarLink(${id}, this.value)"
+          oninput="atualizarBotao(${id}, this.value)" id="input-${id}" />
+        <button class="btn-abrir" id="btn-${id}"
+          onclick="abrirLink(${id})" ${!linkSalvo ? 'disabled' : ''}>
+          ▶ Abrir
+        </button>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  atualizarContadorLinks();
+}
+
+function salvarLink(id, valor) {
+  links[id] = valor.trim();
+  atualizarContadorLinks();
+}
+
+function atualizarBotao(id, valor) {
+  const btn = document.getElementById(`btn-${id}`);
+  if (btn) btn.disabled = !valor.trim();
+}
+
+function abrirLink(id) {
+  const url = links[id];
+  if (url) window.open(url, "_blank");
+}
+
+function atualizarContadorLinks() {
+  const total = Object.values(links).filter(v => v).length;
+  document.getElementById("total-links").textContent = total;
+}
+
+function filtrar(regiao, btn) {
+  filtroAtual = regiao;
+  document.querySelectorAll(".filtro-btn").forEach(b => b.classList.remove("ativo"));
+  btn.classList.add("ativo");
+  renderizar();
+}
+
+function buscar(valor) {
+  buscaAtual = valor;
+  renderizar();
+}
+
+// Init
+document.getElementById("total-exercicios").textContent = EXERCICIOS.length;
+renderizar();
+</script>
+</body>
+</html>

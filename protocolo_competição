@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocolo de Competição — SBBSF</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --azul: #0D2A5E; --azul2: #1A3F80; --amarelo: #F5C500; --verde: #009933;
+  --vermelho: #C0392B; --laranja: #E67E22; --cinza: #F0F3F8; --borda: #DDE3EE;
+  --texto: #1A1A2E; --muted: #6B7A99; --teal: #0D8C7A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #F7F9FD; color: var(--texto); min-height: 100vh; }
+header { background: var(--azul); padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 24px rgba(13,42,94,0.18); }
+.header-inner { max-width: 900px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-badge { background: var(--amarelo); color: var(--azul); font-family: 'Syne', sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 1.5px; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
+.header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: #fff; line-height: 1.2; }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 300; }
+.btn-voltar { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 7px 14px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; text-decoration: none; white-space: nowrap; }
+.hero { background: linear-gradient(135deg, #071A2B 0%, #0D2A5E 60%, #1A3F80 100%); padding: 32px 24px; border-bottom: 3px solid var(--amarelo); }
+.hero-inner { max-width: 900px; margin: 0 auto; }
+.hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--amarelo); color: var(--azul); font-family: 'Syne', sans-serif; font-weight: 800; font-size: 10px; letter-spacing: 1px; padding: 4px 12px; border-radius: 99px; text-transform: uppercase; margin-bottom: 12px; }
+.hero-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 26px; color: #fff; margin-bottom: 8px; line-height: 1.2; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6; max-width: 600px; margin-bottom: 20px; }
+.hero-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+.hstat { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 18px; text-align: center; }
+.hstat-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--amarelo); line-height: 1; }
+.hstat-label { font-size: 10px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.8px; margin-top: 2px; }
+.hooper-section { max-width: 900px; margin: 28px auto; padding: 0 24px; }
+.section-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: var(--azul); margin-bottom: 4px; }
+.section-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.hooper-card { background: #fff; border: 1.5px solid var(--borda); border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(13,42,94,0.07); }
+.hooper-header { background: var(--azul); padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+.hooper-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: #fff; }
+.hooper-header-sub { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+.hooper-body { padding: 20px; }
+.hooper-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media(max-width:480px){ .hooper-inputs { grid-template-columns: 1fr; } }
+.hooper-field .field-name { font-size: 13px; font-weight: 600; color: var(--azul); margin-bottom: 8px; }
+.slider-row { display: flex; align-items: center; gap: 10px; }
+.hooper-slider { flex: 1; -webkit-appearance: none; height: 6px; border-radius: 3px; outline: none; cursor: pointer; background: #E5E7EB; }
+.hooper-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--azul); cursor: pointer; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+.slider-val { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--azul); min-width: 28px; text-align: center; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-top: 2px; }
+.btn-calcular { width: 100%; background: var(--azul); color: #fff; border: none; border-radius: 10px; padding: 13px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; cursor: pointer; transition: background 0.15s; letter-spacing: 0.5px; }
+.btn-calcular:hover { background: var(--azul2); }
+.resultado-hooper { display: none; margin-top: 16px; border-radius: 12px; overflow: hidden; border: 2px solid; }
+.resultado-hooper.verde { border-color: #009933; background: #F0FFF4; }
+.resultado-hooper.amarelo { border-color: #E8A020; background: #FFFBEB; }
+.resultado-hooper.vermelho { border-color: #C0392B; background: #FFF5F5; }
+.resultado-header { padding: 12px 18px; display: flex; align-items: center; gap: 10px; }
+.resultado-hooper.verde .resultado-header { background: #009933; }
+.resultado-hooper.amarelo .resultado-header { background: #E8A020; }
+.resultado-hooper.vermelho .resultado-header { background: #C0392B; }
+.resultado-emoji { font-size: 22px; }
+.resultado-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; color: #fff; }
+.resultado-score { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 1px; }
+.resultado-body { padding: 14px 18px; }
+.resultado-protocolo { font-size: 13px; color: var(--texto); line-height: 1.6; }
+.resultado-protocolo strong { color: var(--azul); }
+.resultado-alerta { margin-top: 10px; background: rgba(13,42,94,0.06); border-radius: 8px; padding: 10px 12px; font-size: 12px; color: var(--muted); font-style: italic; }
+.timeline-section { max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item { display: flex; gap: 0; position: relative; }
+.tl-left { display: flex; flex-direction: column; align-items: center; width: 64px; flex-shrink: 0; }
+.tl-hora { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; color: var(--azul); text-align: center; padding-top: 18px; line-height: 1.1; }
+.tl-hora small { font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 10px; color: var(--muted); display: block; }
+.tl-line-wrap { display: flex; flex-direction: column; align-items: center; padding-top: 18px; }
+.tl-dot { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid #fff; flex-shrink: 0; box-shadow: 0 0 0 2px currentColor; }
+.tl-line { width: 2px; flex: 1; min-height: 20px; }
+.tl-right { flex: 1; padding: 14px 0 14px 16px; }
+.tl-card { background: #fff; border: 1.5px solid var(--borda); border-radius: 14px; padding: 16px 18px; transition: box-shadow 0.2s; }
+.tl-card:hover { box-shadow: 0 4px 18px rgba(13,42,94,0.10); }
+.tl-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.tl-card-icon { font-size: 20px; }
+.tl-card-titulo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: var(--azul); flex: 1; line-height: 1.3; }
+.tl-card-badge { font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+.tl-card-lista { display: flex; flex-direction: column; gap: 6px; }
+.tl-item-ex { display: flex; align-items: baseline; gap: 8px; font-size: 12.5px; color: var(--texto); line-height: 1.5; }
+.tl-num { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 10px; color: var(--amarelo); background: var(--azul); border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tl-obs { margin-top: 10px; background: #FFF8E1; border-left: 3px solid var(--amarelo); border-radius: 6px; padding: 8px 12px; font-size: 12px; color: #7A5C00; font-weight: 500; }
+.tl-item-jogo .tl-card { background: linear-gradient(135deg, #071A2B, #0D2A5E); border-color: var(--amarelo); }
+.tl-item-jogo .tl-card-titulo { color: #fff; }
+.tl-item-jogo .tl-card-top { border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 12px; }
+.jogo-info { display: flex; gap: 12px; flex-wrap: wrap; }
+.jogo-stat { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 14px; text-align: center; }
+.jogo-stat-label { font-size: 9px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.8px; display: block; }
+.jogo-stat-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--amarelo); display: block; margin-top: 2px; }
+.jogo-texto { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 12px; line-height: 1.6; }
+.semaforo-section { max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
+.semaforo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media(max-width:600px){ .semaforo-grid { grid-template-columns: 1fr; } }
+.semaforo-card { border-radius: 14px; overflow: hidden; border: 2px solid; }
+.semaforo-card.verde { border-color: #009933; }
+.semaforo-card.amarelo { border-color: #E8A020; }
+.semaforo-card.vermelho { border-color: #C0392B; }
+.semaforo-top { padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+.semaforo-card.verde .semaforo-top { background: #009933; }
+.semaforo-card.amarelo .semaforo-top { background: #E8A020; }
+.semaforo-card.vermelho .semaforo-top { background: #C0392B; }
+.semaforo-circulo { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center; }
+.semaforo-card.verde .semaforo-circulo { background: #00CC44; }
+.semaforo-card.amarelo .semaforo-circulo { background: #FFD700; }
+.semaforo-card.vermelho .semaforo-circulo { background: #E74C3C; }
+.semaforo-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; color: #fff; line-height: 1.2; }
+.semaforo-score { font-size: 10px; color: rgba(255,255,255,0.75); }
+.semaforo-body { padding: 14px 16px; background: #fff; }
+.semaforo-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 6px; display: block; }
+.semaforo-item { font-size: 12px; color: var(--texto); line-height: 1.6; padding: 4px 0; border-bottom: 1px solid var(--cinza); }
+.semaforo-item:last-child { border-bottom: none; }
+.semaforo-item strong { color: var(--azul); }
+.btb-section { max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
+.btb-card { background: linear-gradient(135deg, #2D0A0A, #5C1A1A); border-radius: 16px; padding: 24px; border: 2px solid #C0392B; }
+.btb-tag { display: inline-flex; align-items: center; gap: 5px; background: #C0392B; color: #fff; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 10px; letter-spacing: 1px; padding: 3px 12px; border-radius: 99px; text-transform: uppercase; margin-bottom: 10px; }
+.btb-titulo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 8px; }
+.btb-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 20px; line-height: 1.6; }
+.btb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:520px){ .btb-grid { grid-template-columns: 1fr; } }
+.btb-bloco { background: rgba(255,255,255,0.07); border-radius: 10px; padding: 14px; border: 1px solid rgba(255,255,255,0.1); }
+.btb-bloco-titulo { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px; color: var(--amarelo); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+.btb-lista { display: flex; flex-direction: column; gap: 6px; }
+.btb-item { font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.5; display: flex; gap: 7px; }
+.btb-item::before { content: "→"; color: var(--amarelo); flex-shrink: 0; font-weight: 700; }
+.btb-alerta { margin-top: 16px; background: rgba(192,57,43,0.3); border: 1px solid rgba(192,57,43,0.5); border-radius: 10px; padding: 12px 16px; font-size: 13px; color: #FFB3B3; font-weight: 500; line-height: 1.6; }
+.btb-alerta strong { color: #fff; }
+.wa-section { max-width: 900px; margin: 0 auto 28px; padding: 0 24px; }
+.wa-card { background: #fff; border: 1.5px solid var(--borda); border-radius: 16px; overflow: hidden; }
+.wa-header { background: #25D366; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+.wa-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; color: #fff; }
+.wa-header-sub { font-size: 11px; color: rgba(255,255,255,0.8); }
+.wa-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.wa-msg { background: #DCF8C6; border-radius: 12px 12px 12px 2px; padding: 12px 16px; font-size: 13px; color: #1A1A2E; line-height: 1.6; max-width: 90%; position: relative; }
+.wa-msg::before { content: attr(data-horario); display: block; font-size: 10px; color: #6B7A99; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.wa-msg-titulo { font-weight: 700; color: var(--azul); margin-bottom: 4px; }
+.wa-copy { display: inline-flex; align-items: center; gap: 6px; background: var(--cinza); border: 1px solid var(--borda); border-radius: 8px; padding: 6px 12px; font-size: 11px; color: var(--muted); cursor: pointer; margin-top: 8px; transition: all 0.15s; }
+.wa-copy:hover { background: var(--azul); color: #fff; border-color: var(--azul); }
+footer { border-top: 1px solid var(--borda); padding: 20px 32px; text-align: center; font-size: 12px; color: var(--muted); font-style: italic; margin-top: 40px; }
+footer strong { color: var(--azul); font-style: normal; }
+.cor-manha { color: #E8A020; }
+.cor-prejogo { color: #0D8C7A; }
+.cor-posjogo { color: #1A6B9A; }
+.cor-noite { color: #7B2D8B; }
+.bg-manha { background: #FFF8E1; border-color: #E8A020 !important; }
+.bg-prejogo { background: #E0F7F4; border-color: #0D8C7A !important; }
+.bg-noite { background: #F5F0FF; border-color: #7B2D8B !important; }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="header-brand">
+      <div class="header-badge">BeachMed</div>
+      <div>
+        <div class="header-title">Protocolo de Competição Remota</div>
+        <div class="header-sub">Seleção Brasileira Feminina de Beach Soccer</div>
+      </div>
+    </div>
+    <a href="./index.html" class="btn-voltar">← Banco de Exercícios</a>
+  </div>
+</header>
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">🏆 Gestão Remota de Carga</div>
+    <div class="hero-titulo">Dia de Jogo — O que fazer e quando</div>
+    <div class="hero-sub">Protocolo autônomo para atletas em competição. Consulte o Hooper da manhã, identifique sua zona e siga o protocolo do dia. A Gabi monitora os dados remotamente.</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">3</div><div class="hstat-label">Momentos</div></div>
+      <div class="hstat"><div class="hstat-num">1 jogo</div><div class="hstat-label">por dia</div></div>
+      <div class="hstat"><div class="hstat-num">Hooper</div><div class="hstat-label">decide o protocolo</div></div>
+      <div class="hstat"><div class="hstat-num">18 min</div><div class="hstat-label">pré-jogo</div></div>
+    </div>
+  </div>
+</div>
+<div class="hooper-section">
+  <div class="section-titulo">📊 Checador de Hooper — Manhã do Jogo</div>
+  <div class="section-sub">Preencha logo ao acordar. O resultado define o seu protocolo de hoje.</div>
+  <div class="hooper-card">
+    <div class="hooper-header">
+      <div>
+        <div class="hooper-header-title">Índice de Hooper</div>
+        <div class="hooper-header-sub">1 = ótimo &nbsp;|&nbsp; 7 = péssimo — responda com honestidade</div>
+      </div>
+    </div>
+    <div class="hooper-body">
+      <div class="hooper-inputs">
+        <div class="hooper-field">
+          <div class="field-name">😴 Qualidade do Sono</div>
+          <div class="slider-row">
+            <input type="range" min="1" max="7" value="3" class="hooper-slider" id="sl-sono" oninput="atualizarSlider('sono',this.value)">
+            <div class="slider-val" id="val-sono">3</div>
+          </div>
+          <div class="slider-labels"><span>Ótimo</span><span>Péssimo</span></div>
+        </div>
+        <div class="hooper-field">
+          <div class="field-name">😰 Nível de Estresse</div>
+          <div class="slider-row">
+            <input type="range" min="1" max="7" value="3" class="hooper-slider" id="sl-estresse" oninput="atualizarSlider('estresse',this.value)">
+            <div class="slider-val" id="val-estresse">3</div>
+          </div>
+          <div class="slider-labels"><span>Nenhum</span><span>Muito alto</span></div>
+        </div>
+        <div class="hooper-field">
+          <div class="field-name">💪 Fadiga Física</div>
+          <div class="slider-row">
+            <input type="range" min="1" max="7" value="3" class="hooper-slider" id="sl-fadiga" oninput="atualizarSlider('fadiga',this.value)">
+            <div class="slider-val" id="val-fadiga">3</div>
+          </div>
+          <div class="slider-labels"><span>Descansada</span><span>Exausta</span></div>
+        </div>
+        <div class="hooper-field">
+          <div class="field-name">🦵 Dor Muscular</div>
+          <div class="slider-row">
+            <input type="range" min="1" max="7" value="3" class="hooper-slider" id="sl-dor" oninput="atualizarSlider('dor',this.value)">
+            <div class="slider-val" id="val-dor">3</div>
+          </div>
+          <div class="slider-labels"><span>Nenhuma</span><span>Intensa</span></div>
+        </div>
+      </div>
+      <button class="btn-calcular" onclick="calcularHooper()">Calcular meu protocolo de hoje →</button>
+      <div class="resultado-hooper" id="resultado-hooper">
+        <div class="resultado-header">
+          <div class="resultado-emoji" id="res-emoji"></div>
+          <div>
+            <div class="resultado-titulo" id="res-titulo"></div>
+            <div class="resultado-score" id="res-score"></div>
+          </div>
+        </div>
+        <div class="resultado-body">
+          <div class="resultado-protocolo" id="res-protocolo"></div>
+          <div class="resultado-alerta" id="res-alerta"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><div class="timeline-section">
+  <div class="section-titulo">🕐 Rotina Completa do Dia de Jogo</div>
+  <div class="section-sub">Horários baseados em jogo às 15h — ajuste proporcionalmente ao horário do seu jogo.</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">7h<small>manhã</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#E8A020"></div>
+          <div class="tl-line" style="background:linear-gradient(#E8A020,#E8A02044)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card bg-manha">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">☀️</div>
+            <div class="tl-card-titulo cor-manha">Acordar — Hooper + Nutrição</div>
+            <div class="tl-card-badge" style="background:#FFF3CD;color:#856404">Obrigatório</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>Preencher o Hooper</strong> no formulário (link no grupo) — faça antes de se levantar da cama se possível</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>Café da manhã reforçado:</strong> carboidrato + proteína + fruta. Não pular. Comer até 3h antes do jogo.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Hidratação:</strong> 500ml de água ao acordar. Meta do dia: 35ml/kg de peso corporal.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">4</span><span><strong>Autoavaliação:</strong> alguma dor nova em relação a ontem? Reportar para a Gabi pelo WhatsApp.</span></div>
+          </div>
+          <div class="tl-obs">⚠️ Se o Hooper total for ≥ 20, avise a Gabi imediatamente — o protocolo pré-jogo será adaptado.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">12h<small>meio-dia</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#0D8C7A"></div>
+          <div class="tl-line" style="background:linear-gradient(#0D8C7A,#0D8C7A44)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card bg-prejogo">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">🥗</div>
+            <div class="tl-card-titulo cor-prejogo">Refeição Pré-Jogo + Descanso</div>
+            <div class="tl-card-badge" style="background:#C8F0EB;color:#0D6B5A">3h antes do jogo</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>Refeição leve:</strong> arroz/massa + proteína magra + pouco vegetal. Sem gordura em excesso.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>Descanso ativo:</strong> caminhada leve 10 min ou alongamento suave. Sem exercício intenso.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Hidratação contínua:</strong> 200–300ml a cada hora até o jogo.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">14h<small>pré-jogo</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#0D8C7A"></div>
+          <div class="tl-line" style="background:linear-gradient(#0D8C7A,#0D2A5E)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card bg-prejogo">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">⚡</div>
+            <div class="tl-card-titulo cor-prejogo">FIFA 11+ Pré-Jogo — 18 minutos</div>
+            <div class="tl-card-badge" style="background:#C8F0EB;color:#0D6B5A">60 min antes</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>PARTE 1 — Corrida e Mobilidade (8 min):</strong> Running Straight Ahead → Hip Out → Hip In → Circling Partner → Shoulder Contact → Quick Forwards and Backwards. Tudo em areia.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>PARTE 3 — Alta Intensidade (2 min):</strong> Running Across → Bounding → Plant and Cut. Máxima ativação neuromuscular.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Ativação glútea (3 min):</strong> 2 séries de clamshell com miniband + 10 agachamentos com controle de valgo. Sem exaustão.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">4</span><span><strong>Mobilização específica (5 min):</strong> tornozelo com band se houver histórico de entorse. Mobilização de quadril. Nenhum exercício de força pesada.</span></div>
+          </div>
+          <div class="tl-obs">⚠️ Se Hooper ≥ 20: pular a Parte 3. Fazer apenas Parte 1 + ativação glútea leve (10 min total).</div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item tl-item-jogo">
+      <div class="tl-left">
+        <div class="tl-hora" style="color:var(--amarelo)">15h<small style="color:rgba(255,245,100,0.7)">JOGO</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:var(--amarelo)"></div>
+          <div class="tl-line" style="background:linear-gradient(var(--amarelo),#1A6B9A)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">⚽</div>
+            <div class="tl-card-titulo">JOGO</div>
+          </div>
+          <div class="jogo-info">
+            <div class="jogo-stat"><span class="jogo-stat-label">Duração</span><span class="jogo-stat-val">3 períodos</span></div>
+            <div class="jogo-stat"><span class="jogo-stat-label">Durante</span><span class="jogo-stat-val">Hidratação</span></div>
+            <div class="jogo-stat"><span class="jogo-stat-label">Intervalo</span><span class="jogo-stat-val">Gelo se dor</span></div>
+          </div>
+          <div class="jogo-texto">Durante o intervalo: reportar qualquer dor, pancada ou desconforto para a Gabi via WhatsApp. Não esconder. Isso protege a atleta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">16h30<small>pós-jogo</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#1A6B9A"></div>
+          <div class="tl-line" style="background:linear-gradient(#1A6B9A,#1A6B9A44)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card" style="border-color:#1A6B9A">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">🧊</div>
+            <div class="tl-card-titulo cor-posjogo">Recuperação Imediata — 0 a 30 min</div>
+            <div class="tl-card-badge" style="background:#E8F4FB;color:#1A6B9A">Janela crítica</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>PSE pós-jogo:</strong> preencher no formulário (Borg CR-10). Obrigatório para o monitoramento da Gabi.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>Reidratação:</strong> água + isotônico. Cada 1kg perdido = 1,5L a repor.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Janela anabólica:</strong> carboidrato + proteína em até 30 min. Banana + whey, iogurte + fruta ou sanduíche de atum.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">4</span><span><strong>Crioterapia:</strong> gelo 15 min nas regiões com queixa. Reportar qualquer queixa nova para a Gabi.</span></div>
+          </div>
+          <div class="tl-obs">⚠️ Sem reunião técnica intensa nesse momento. O sistema nervoso ainda está em estado de alerta.</div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">17h30<small>recuperação</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#1A6B9A"></div>
+          <div class="tl-line" style="background:linear-gradient(#1A6B9A44,#7B2D8B44)"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card" style="border-color:#1A6B9A">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">🧴</div>
+            <div class="tl-card-titulo cor-posjogo">Recuperação Ativa — 30 a 60 min pós-jogo</div>
+            <div class="tl-card-badge" style="background:#E8F4FB;color:#1A6B9A">CWI se disponível</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>Cool-down:</strong> trote leve 3 min + caminhada 2 min na beira da água.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>Foam rolling completo:</strong> quadríceps → isquiotibiais → glúteo → panturrilha → IT band → lombar. 60 seg por região.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Alongamento estático seletivo:</strong> iliopsoas (45s cada) → isquiotibiais → gastrocnêmio → glúteo.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">4</span><span><strong>Imersão em água fria (CWI):</strong> se disponível, 10–15 min a 12–15°C. Alternativa: banho frio de 5 min.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-hora">21h<small>noite</small></div>
+        <div class="tl-line-wrap">
+          <div class="tl-dot" style="color:#7B2D8B"></div>
+          <div class="tl-line" style="background:none"></div>
+        </div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-card bg-noite">
+          <div class="tl-card-top">
+            <div class="tl-card-icon">🌙</div>
+            <div class="tl-card-titulo cor-noite">Recuperação Noturna — A mais importante</div>
+            <div class="tl-card-badge" style="background:#EDE0FF;color:#5B1F8A">Sono = GH + reparo</div>
+          </div>
+          <div class="tl-card-lista">
+            <div class="tl-item-ex"><span class="tl-num">1</span><span><strong>Jantar completo:</strong> proteína + carboidrato + vegetais. Não pular — é quando ocorre o reparo muscular.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">2</span><span><strong>Sem álcool:</strong> reduz síntese proteica em 37% e prejudica a qualidade do sono.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">3</span><span><strong>Sono: 8–9 horas.</strong> 70% da síntese do GH acontece durante o sono.</span></div>
+            <div class="tl-item-ex"><span class="tl-num">4</span><span><strong>Critérios para reportar:</strong> dor que não passou, inchaço, limitação de movimento, dormência → mensagem para a Gabi antes de dormir.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="semaforo-section">
+  <div class="section-titulo">🚦 Semáforo de Carga — Decisão pelo Hooper</div>
+  <div class="section-sub">A Gabi lê os dados remotamente e orienta. Mas em caso de dúvida, a atleta já sabe o que fazer.</div>
+  <div class="semaforo-grid">
+    <div class="semaforo-card verde">
+      <div class="semaforo-top"><div class="semaforo-circulo"></div><div><div class="semaforo-titulo">VERDE</div><div class="semaforo-score">Hooper ≤ 16</div></div></div>
+      <div class="semaforo-body">
+        <span class="semaforo-label">Pré-jogo</span>
+        <div class="semaforo-item"><strong>FIFA 11+</strong> Partes 1 + 3 completo</div>
+        <div class="semaforo-item">Ativação glútea 2 séries</div>
+        <div class="semaforo-item">Mobilização específica</div>
+        <span class="semaforo-label" style="margin-top:10px">Pós-jogo</span>
+        <div class="semaforo-item">Protocolo completo</div>
+        <div class="semaforo-item">CWI se disponível</div>
+        <div class="semaforo-item" style="color:#009933;font-weight:600">✓ Atleta pronta para jogar</div>
+      </div>
+    </div>
+    <div class="semaforo-card amarelo">
+      <div class="semaforo-top"><div class="semaforo-circulo"></div><div><div class="semaforo-titulo">AMARELO</div><div class="semaforo-score">Hooper 17–20</div></div></div>
+      <div class="semaforo-body">
+        <span class="semaforo-label">Pré-jogo</span>
+        <div class="semaforo-item"><strong>FIFA 11+</strong> Parte 1 apenas</div>
+        <div class="semaforo-item">Ativação glútea leve (1 série)</div>
+        <div class="semaforo-item">Mobilização de tornozelo + quadril</div>
+        <span class="semaforo-label" style="margin-top:10px">Pós-jogo</span>
+        <div class="semaforo-item">Priorizar CWI + foam rolling</div>
+        <div class="semaforo-item">Aumentar sono para 9h</div>
+        <div class="semaforo-item" style="color:#E8A020;font-weight:600">⚠️ Avisar a Gabi pela manhã</div>
+      </div>
+    </div>
+    <div class="semaforo-card vermelho">
+      <div class="semaforo-top"><div class="semaforo-circulo"></div><div><div class="semaforo-titulo">VERMELHO</div><div class="semaforo-score">Hooper > 20</div></div></div>
+      <div class="semaforo-body">
+        <span class="semaforo-label">Pré-jogo</span>
+        <div class="semaforo-item">Apenas mobilização articular</div>
+        <div class="semaforo-item">Sem FIFA 11+ de intensidade</div>
+        <div class="semaforo-item">Sem pliometria ou excêntrico</div>
+        <span class="semaforo-label" style="margin-top:10px">Pós-jogo</span>
+        <div class="semaforo-item">CWI obrigatório se disponível</div>
+        <div class="semaforo-item">Sono 9–10h mínimo</div>
+        <div class="semaforo-item" style="color:#C0392B;font-weight:600">🔴 Contato imediato com a Gabi</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="btb-section">
+  <div class="btb-card">
+    <div class="btb-tag">⚠️ Alerta Especial</div>
+    <div class="btb-titulo">Back-to-Back Games — Jogos em Dias Consecutivos</div>
+    <div class="btb-sub">Quando há jogo hoje e amanhã, a recuperação deixa de ser opcional e vira protocolo obrigatório.</div>
+    <div class="btb-grid">
+      <div class="btb-bloco">
+        <div class="btb-bloco-titulo">🌙 Noite após o jogo</div>
+        <div class="btb-lista">
+          <div class="btb-item">CWI obrigatório — mínimo 10 min</div>
+          <div class="btb-item">Foam rolling completo antes de dormir</div>
+          <div class="btb-item">Jantar reforçado — não pular</div>
+          <div class="btb-item">Sono 9h mínimo — apagar as luzes cedo</div>
+          <div class="btb-item">Reportar toda queixa para a Gabi</div>
+        </div>
+      </div>
+      <div class="btb-bloco">
+        <div class="btb-bloco-titulo">☀️ Manhã do próximo jogo</div>
+        <div class="btb-lista">
+          <div class="btb-item">Hooper obrigatório ao acordar</div>
+          <div class="btb-item">Se PSE pós-jogo de ontem ≥ 8 → Parte 1 apenas</div>
+          <div class="btb-item">Sem excêntrico pesado, sem nórdico</div>
+          <div class="btb-item">Sem pliometria de alta demanda</div>
+          <div class="btb-item">Hidratação dobrada desde o acordar</div>
+        </div>
+      </div>
+    </div>
+    <div class="btb-alerta"><strong>Regra absoluta:</strong> atleta com PSE pós-jogo ≥ 8 <strong>não faz</strong> aquecimento de alta intensidade no dia seguinte. A atleta que poupa hoje joga melhor amanhã e chega inteira no final do torneio.</div>
+  </div>
+</div>
+<div class="wa-section">
+  <div class="section-titulo">💬 Modelos de Mensagem — Gabi → Atleta</div>
+  <div class="section-sub">Mensagens padrão para enviar pelo WhatsApp com base nos dados do Hooper. Copie e personalize com o nome da atleta.</div>
+  <div class="wa-card">
+    <div class="wa-header">
+      <div>
+        <div class="wa-header-title">📲 Templates por Zona do Semáforo</div>
+        <div class="wa-header-sub">Enviar pela manhã do jogo após ler o Hooper</div>
+      </div>
+    </div>
+    <div class="wa-body">
+      <div class="wa-msg" data-horario="🟢 Zona Verde — Hooper ≤ 16">
+        <div class="wa-msg-titulo">Bom dia [nome]! 🟢</div>
+        Seus dados de hoje estão ótimos. Hooper [X] — você está bem recuperada.<br><br>
+        Protocolo de hoje:<br>
+        ✅ FIFA 11+ completo (Partes 1 + 3) — 18 min antes do jogo<br>
+        ✅ Ativação glútea normal<br>
+        ✅ Pós-jogo: foam rolling + CWI se disponível<br><br>
+        Pode jogar com tudo! 💪🏽 Qualquer queixa durante o jogo, me avisa.
+        <br><button class="wa-copy" onclick="copiarMensagem(this)">📋 Copiar mensagem</button>
+      </div>
+      <div class="wa-msg" data-horario="🟡 Zona Amarela — Hooper 17–20">
+        <div class="wa-msg-titulo">Bom dia [nome]! 🟡</div>
+        Seus dados de hoje mostram que você está um pouco sobrecarregada. Hooper [X] — vamos ser estratégicas.<br><br>
+        Protocolo de hoje:<br>
+        ⚠️ FIFA 11+: Parte 1 apenas (mobilidade + corrida leve)<br>
+        ⚠️ Sem excêntrico pesado antes do jogo<br>
+        ✅ Mobilização de tornozelo e quadril<br>
+        ✅ Pós-jogo: priorizar CWI + sono 9h<br><br>
+        Você joga sim, mas o corpo pediu atenção. Me avisa qualquer coisa! 🧡
+        <br><button class="wa-copy" onclick="copiarMensagem(this)">📋 Copiar mensagem</button>
+      </div>
+      <div class="wa-msg" data-horario="🔴 Zona Vermelha — Hooper > 20">
+        <div class="wa-msg-titulo">Bom dia [nome]! 🔴</div>
+        Seus dados de hoje estão em zona de alerta. Hooper [X] — preciso que você siga o protocolo à risca hoje.<br><br>
+        Protocolo de hoje:<br>
+        🔴 Pré-jogo: apenas mobilização articular suave (10 min)<br>
+        🔴 Sem FIFA 11+ intenso, sem pliometria<br>
+        🔴 Pós-jogo: CWI obrigatório + sono mínimo 9h<br>
+        🔴 Reportar qualquer dor durante o jogo imediatamente<br><br>
+        Você é importante demais para o torneio todo. Cuidar hoje garante você nas próximas fases. Me liga se precisar! ❤️
+        <br><button class="wa-copy" onclick="copiarMensagem(this)">📋 Copiar mensagem</button>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  <strong>BEACHMED SYSTEM</strong> — Seleção Brasileira Feminina de Beach Soccer &nbsp;|&nbsp;
+  Fisioterapeuta Gabriella Costa Vila Real &nbsp;|&nbsp;
+  <em>"Além da areia, existe ciência"</em>
+</footer>
+<script>
+function atualizarSlider(campo, valor) {
+  document.getElementById('val-' + campo).textContent = valor;
+  const slider = document.getElementById('sl-' + campo);
+  const pct = (valor - 1) / 6 * 100;
+  const cor = valor <= 2 ? '#009933' : valor <= 4 ? '#E8A020' : '#C0392B';
+  slider.style.background = `linear-gradient(to right, ${cor} ${pct}%, #E5E7EB ${pct}%)`;
+  document.getElementById('val-' + campo).style.color = cor;
+}
+function calcularHooper() {
+  const sono = parseInt(document.getElementById('sl-sono').value);
+  const estresse = parseInt(document.getElementById('sl-estresse').value);
+  const fadiga = parseInt(document.getElementById('sl-fadiga').value);
+  const dor = parseInt(document.getElementById('sl-dor').value);
+  const total = sono + estresse + fadiga + dor;
+  const el = document.getElementById('resultado-hooper');
+  const emoji = document.getElementById('res-emoji');
+  const titulo = document.getElementById('res-titulo');
+  const score = document.getElementById('res-score');
+  const protocolo = document.getElementById('res-protocolo');
+  const alerta = document.getElementById('res-alerta');
+  el.style.display = 'block';
+  el.className = 'resultado-hooper';
+  if (total <= 16) {
+    el.classList.add('verde');
+    emoji.textContent = '🟢';
+    titulo.textContent = 'Zona Verde — Você está bem recuperada';
+    score.textContent = `Hooper total: ${total} pontos (sono: ${sono} | estresse: ${estresse} | fadiga: ${fadiga} | dor: ${dor})`;
+    protocolo.innerHTML = `<strong>Protocolo de hoje:</strong><br>✅ FIFA 11+ completo — Partes 1 + 3 (18 min antes do jogo)<br>✅ Ativação glútea normal<br>✅ Mobilização específica conforme queixa<br>✅ Pós-jogo: protocolo completo + CWI se disponível`;
+    alerta.textContent = 'Avise a Gabi que está verde. Continue o monitoramento pós-jogo normalmente.';
+  } else if (total <= 20) {
+    el.classList.add('amarelo');
+    emoji.textContent = '🟡';
+    titulo.textContent = 'Zona Amarela — Atenção redobrada hoje';
+    score.textContent = `Hooper total: ${total} pontos (sono: ${sono} | estresse: ${estresse} | fadiga: ${fadiga} | dor: ${dor})`;
+    protocolo.innerHTML = `<strong>Protocolo de hoje:</strong><br>⚠️ FIFA 11+: Parte 1 apenas (corrida + mobilidade — 8 min)<br>⚠️ Ativação glútea leve (1 série apenas)<br>⚠️ Sem excêntrico pesado ou pliometria intensa<br>✅ Mobilização de tornozelo e quadril<br>✅ Pós-jogo: priorizar CWI + foam rolling + sono 9h`;
+    alerta.textContent = 'Avise a Gabi que está amarela. Ela vai confirmar ou ajustar o protocolo antes do jogo.';
+  } else {
+    el.classList.add('vermelho');
+    emoji.textContent = '🔴';
+    titulo.textContent = 'Zona Vermelha — Corpo em alerta. Protocolo conservador.';
+    score.textContent = `Hooper total: ${total} pontos (sono: ${sono} | estresse: ${estresse} | fadiga: ${fadiga} | dor: ${dor})`;
+    protocolo.innerHTML = `<strong>Protocolo de hoje:</strong><br>🔴 Pré-jogo: apenas mobilização articular suave (10 min)<br>🔴 Sem FIFA 11+ intenso, sem pliometria, sem excêntrico<br>🔴 Ativação glútea mínima: 1 série de clamshell leve<br>🔴 Pós-jogo: CWI obrigatório + foam rolling + sono 9–10h`;
+    alerta.textContent = '⚠️ Avise a Gabi IMEDIATAMENTE. Ela precisa saber antes do aquecimento para comunicar a comissão técnica se necessário.';
+  }
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function copiarMensagem(btn) {
+  const msg = btn.parentElement;
+  const texto = msg.innerText.replace('📋 Copiar mensagem', '').trim();
+  navigator.clipboard.writeText(texto).then(() => {
+    btn.textContent = '✓ Copiado!';
+    btn.style.background = '#009933';
+    btn.style.color = '#fff';
+    setTimeout(() => {
+      btn.textContent = '📋 Copiar mensagem';
+      btn.style.background = '';
+      btn.style.color = '';
+    }, 2000);
+  });
+}
+['sono','estresse','fadiga','dor'].forEach(c => atualizarSlider(c, 3));
+</script>
+</body>
+</html>
